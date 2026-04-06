@@ -7,7 +7,6 @@ const Footer = () => {
     <footer className="bg-white border-t mt-16">
       <div className="max-w-6xl mx-auto px-6 py-8 flex flex-col md:flex-row justify-between items-center gap-4">
 
-        {/* Left */}
         <div className="text-center md:text-left">
           <h2
             onClick={() => navigate("/")}
@@ -42,7 +41,6 @@ const Footer = () => {
           </span>
         </div>
 
-        {/* Right */}
         <p className="text-xs text-gray-400 text-center md:text-right">
           © {new Date().getFullYear()} IdeaValidator. All rights reserved.
         </p>

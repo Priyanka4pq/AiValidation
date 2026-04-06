@@ -36,10 +36,9 @@ Description: ${description}
       },
     );
 
-    // 🔥 Extract text from Gemini response
+    //  Extract text from Gemini response
     let text = response.data.candidates?.[0]?.content?.parts?.[0]?.text || "";
 
-    // 🔥 Clean response (important)
     const jsonMatch = text.match(/\{[\s\S]*\}/);
 
     if (!jsonMatch) {
@@ -61,7 +60,7 @@ Description: ${description}
   }
 };
 
-// GET ALL IDEAS
+// ALL IDEAS
 exports.getIdeas = async (req, res) => {
   try {
     const ideas = await Idea.find().sort({ createdAt: -1 });
@@ -71,7 +70,7 @@ exports.getIdeas = async (req, res) => {
   }
 };
 
-// GET SINGLE IDEA
+//  SINGLE IDEA
 exports.getIdeaById = async (req, res) => {
   try {
     const idea = await Idea.findById(req.params.id);

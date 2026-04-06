@@ -10,7 +10,6 @@ const Navbar = () => {
     <nav className="bg-white border-b">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 py-4 flex justify-between items-center">
         
-        {/* Logo */}
         <h1
           onClick={() => navigate("/")}
           className="text-lg sm:text-xl font-bold cursor-pointer"
