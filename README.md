@@ -1,38 +1,37 @@
 # AI Startup Idea Validator
 
-A full-stack web application that analyzes startup ideas using AI.
+A full-stack web application that analyzes startup ideas using AI and provides structured insights.
 
-## Tech Stack
-- Frontend: React (Vite)
+## 🚀 Features
+- Submit startup ideas
+- AI-generated validation report
+- Dashboard to view ideas
+- Delete ideas
+- Responsive UI
+
+## 🛠 Tech Stack
+- Frontend: React (Vite + Tailwind)
 - Backend: Node.js + Express
 - Database: MongoDB
 - AI: Google Gemini API
 
-## Features
-- Submit startup idea
-- AI-generated validation report
-- Dashboard to view all ideas
-- Detailed analysis page
+## 🔗 Live Demo
+Frontend: [your-vercel-link]  
+Backend: https://aivalidation.onrender.com
 
-## Setup
+## ⚙️ Setup
 
 ### Backend
-cd server
-npm install
-npm run dev
+cd server  
+npm install  
+npm start  
 
 ### Frontend
-cd client
-npm install
-npm run dev
+cd client  
+npm install  
+npm run dev  
 
-## Environment Variables
-
-Create `.env` in server:
+## 🔑 Environment Variables
 
 GEMINI_API_KEY=your_key  
 MONGO_URI=your_db
-
-## Deployment
-Frontend: Vercel  
-Backend: Render
