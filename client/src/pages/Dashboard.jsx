@@ -19,7 +19,7 @@ const Dashboard = () => {
   useEffect(() => {
     const fetchIdeas = async () => {
       try {
-        const res = await axios.get("http://localhost:5000/ideas");
+        const res = await axios.get("https://aivalidation.onrender.com");
         setIdeas(res.data);
       } catch (err) {
         console.log(err);

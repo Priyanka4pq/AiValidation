@@ -11,7 +11,7 @@ const IdeaDetail = () => {
 
   useEffect(() => {
     const fetchIdea = async () => {
-      const res = await axios.get(`http://localhost:5000/ideas/${id}`);
+      const res = await axios.get(`https://aivalidation.onrender.com/ideas/${id}`);
       setIdea(res.data);
     };
     fetchIdea();
