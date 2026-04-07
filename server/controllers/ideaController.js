@@ -74,13 +74,29 @@ exports.getIdeas = async (req, res) => {
 exports.getIdeaById = async (req, res) => {
   try {
     const idea = await Idea.findById(req.params.id);
-
     if (!idea) {
       return res.status(404).json({ error: "Idea not found" });
     }
 
     res.json(idea);
   } catch (error) {
+    res.status(500).json({ error: "Server Error" });
+  }
+};
+
+
+exports.deleteIdea = async (req, res) => {
+  try {
+    const idea = await Idea.findByIdAndDelete(req.params.id);
+
+    if (!idea) {
+      return res.status(404).json({ error: "Idea not found" });
+    }
+
+    res.json({ message: "Idea deleted successfully" });
+
+  } catch (error) {
+    console.log(error);
     res.status(500).json({ error: "Server Error" });
   }
 };
