@@ -5,20 +5,39 @@ exports.createIdea = async (req, res) => {
   try {
     const { title, description } = req.body;
 
-    const prompt = `
+   const prompt = `
 You are a startup analyst.
 
-Return ONLY JSON:
+Return ONLY valid JSON.
+
 {
   "problem": "...",
   "customer": "...",
   "market": "...",
-  "competitors": ["...", "...", "..."],
+  "competitors": [
+    {
+      "name": "...",
+      "differentiation": "..."
+    },
+    {
+      "name": "...",
+      "differentiation": "..."
+    },
+    {
+      "name": "...",
+      "differentiation": "..."
+    }
+  ],
   "tech_stack": ["...", "..."],
   "risk_level": "Low/Medium/High",
   "profitability_score": 0-100,
   "justification": "..."
 }
+
+IMPORTANT:
+- competitors MUST be exactly 3
+- each must include name + differentiation
+- return only JSON (no explanation)
 
 Idea:
 Title: ${title}
