@@ -16,7 +16,7 @@ A full-stack web application that analyzes startup ideas using AI and provides s
 - AI: Google Gemini API
 
 ## 🔗 Live Demo
-Frontend: [your-vercel-link]  
+Frontend: https://ai-validation-frontend-eight.vercel.app/  
 Backend: https://aivalidation.onrender.com
 
 ## ⚙️ Setup
