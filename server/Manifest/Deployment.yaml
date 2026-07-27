@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
     name: ai-backend-deployment
-    namespace: aiValidation
+    namespace: aivalidation
 spec:
     replicas: 2
     selector:
