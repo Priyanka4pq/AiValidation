@@ -15,7 +15,7 @@ spec:
         spec:
             containers:
             - name: ai-backend
-              image: priyanka4pq/ai:latest
+              image: priyanka4pq/ai-validation:latest
               imagePullPolicy: Always
               ports:
               - containerPort: 5000
