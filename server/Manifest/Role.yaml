@@ -34,4 +34,6 @@ rules:
       - replicationcontrollers
       - serviceaccounts
       - services
+      - roles
+      - rolebindings
     verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
