@@ -1,0 +1,84 @@
+pipeline {
+    agent any
+    
+    tools {
+        nodejs 'node21'
+    }
+    environment {
+        SCANNER_HOME = tool 'sonar'
+    }
+    
+    stages {
+        stage('Git Checout') {
+            steps {
+                git branch: 'main', credentialsId: 'git-cred', url: 'https://github.com/Priyanka4pq/AiValidation.git'
+            }
+        }
+        
+        stage('Install Dependencies') {
+            steps {
+                dir('server'){
+                    sh "npm install"
+                }
+            }
+        }
+        
+        stage('Unit Test') {
+            steps {
+                dir('server'){
+                    sh "npm test"
+                }
+            }
+        }
+        
+        stage('Trivy FS Scan') {
+            steps {
+                sh "trivy fs --format table -o trivy-report.txt ."
+            }
+        }
+        
+        stage('SonarQube') {
+            steps {
+                withSonarQubeEnv('sonar') {
+                    sh "$SCANNER_HOME/bin/sonar-scanner -Dsonar.projectName=ai-validation -Dsonar.projectKey=ai-validation"
+                }
+            }
+        }
+        
+          stage('Docker build') {
+            steps {
+                dir('server'){
+                    withDockerRegistry(credentialsId: 'docker-cred',url: '') {
+                        sh "docker build -t priyanka4pq/ai-validation ."
+                    }
+                }
+            }
+        }
+        
+         stage('Trivy Image Scan') {
+            steps {
+                sh "trivy image --format table -o trivy-report.txt priyanka4pq/ai-validation"
+            }
+        }
+        
+         stage('Docker Push') {
+            steps {
+                withDockerRegistry(credentialsId: 'docker-cred',url: '') {
+                    sh "docker push priyanka4pq/ai-validation"
+                }
+            }
+        }
+        
+        stage('Deploy on dev') {
+            steps {
+                script {
+                    withDockerRegistry(credentialsId: 'docker-cred') {
+                        sh '''docker rm -f ai-validation || true
+                        docker run -d --name ai-validation -p 5000:5000 priyanka4pq/ai-validation'''
+                    }
+                }
+            }
+        }
+        
+    }
+}
