@@ -1,0 +1,89 @@
+pipeline {
+    agent any
+    
+    tools {
+        nodejs 'node21'
+    }
+    environment {
+        SCANNER_HOME = tool 'sonar'
+    }
+    
+    stages {
+        stage('Git Checout') {
+            steps {
+                git branch: 'main', credentialsId: 'git-cred', url: 'https://github.com/Priyanka4pq/AiValidation.git'
+            }
+        }
+        
+        stage('Install Dependencies') {
+            steps {
+                dir('server'){
+                    sh "npm install"
+                }
+            }
+        }
+        
+        stage('Unit Test') {
+            steps {
+                dir('server'){
+                    sh "npm test"
+                }
+            }
+        }
+        
+        stage('Trivy FS Scan') {
+            steps {
+                sh "trivy fs --format table -o trivy-report.txt ."
+            }
+        }
+        
+        stage('SonarQube') {
+            steps {
+                withSonarQubeEnv('sonar') {
+                    sh "$SCANNER_HOME/bin/sonar-scanner -Dsonar.projectName=ai-validation1 -Dsonar.projectKey=ai-validation1"
+                }
+            }
+        }
+        
+          stage('Docker build') {
+            steps {
+                dir('server'){
+                    withDockerRegistry(credentialsId: 'docker-cred',url: '') {
+                        sh "docker build -t priyanka4pq/ai-validation1 ."
+                    }
+                }
+            }
+        }
+        
+         stage('Trivy Image Scan') {
+            steps {
+                sh "trivy image --format table -o trivy-report.txt priyanka4pq/ai-validation1"
+            }
+        }
+        
+         stage('Docker Push') {
+            steps {
+                withDockerRegistry(credentialsId: 'docker-cred',url: '') {
+                    sh "docker push priyanka4pq/ai-validation1"
+                }
+            }
+        }
+        
+        stage('Deploy on eks') {
+            steps {
+                  withKubeCredentials(kubectlCredentials: [[caCertificate: '', clusterName: 'my-eks', contextName: '', credentialsId: 'k8s-cred', namespace: 'aivalidation', serverUrl: 'https://FEB91E4294EBD8EE824862E4AF35E842.gr7.ap-south-1.eks.amazonaws.com']]) {
+                    sh "kubectl apply -f server/Manifest/"
+                }
+            }
+        }
+        
+        stage(' Verify Deployment') {
+            steps {
+                  withKubeCredentials(kubectlCredentials: [[caCertificate: '', clusterName: 'my-eks', contextName: '', credentialsId: 'k8s-cred', namespace: 'aivalidation', serverUrl: 'https://FEB91E4294EBD8EE824862E4AF35E842.gr7.ap-south-1.eks.amazonaws.com']]) {
+                    sh "kubectl get pods -n aivalidation"
+                    sh "kubectl get svc -n aivalidation"
+                }
+            }
+        }
+    }
+}
